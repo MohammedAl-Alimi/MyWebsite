@@ -136,74 +136,57 @@ for (let i = 0; i < formInputs.length; i++) {
 
 
 
-// page navigation variables
-const navigationLinks = document.querySelectorAll("[data-nav-link]");
-const pages = document.querySelectorAll("[data-page]");
-
-// add event to all nav link
-for (let i = 0; i < navigationLinks.length; i++) {
-  navigationLinks[i].addEventListener("click", function () {
-    console.log("Nav button clicked:", this.innerHTML, "data-page:", this.dataset.page);
-    
-    const targetPage = this.dataset.page || this.innerHTML.toLowerCase();
-    console.log("Looking for page with data-page:", targetPage);
-    
-    for (let j = 0; j < pages.length; j++) {
-      console.log("Checking page:", pages[j].dataset.page);
-      
-      if (targetPage === pages[j].dataset.page) {
-        console.log("Match found! Activating page:", pages[j].dataset.page);
-        
-        // Remove active from all pages and nav links
-        pages.forEach(page => {
-          page.classList.remove("active");
-          page.classList.remove("fade-in");
-        });
-        navigationLinks.forEach(link => link.classList.remove("active"));
-        
-        // Add active to current page and nav link
-        pages[j].classList.add("active");
-        this.classList.add("active");
-        
-        // Add fade-in animation
-        pages[j].classList.add("fade-in");
-        setTimeout(() => {
-          pages[j].classList.remove("fade-in");
-        }, 500);
-        
-        window.scrollTo(0, 0);
-        break;
-      }
-    }
-  });
-}
-
-// Debug: Test if elements are found correctly
-console.log("Script loaded!");
-console.log("Navigation links found:", document.querySelectorAll("[data-nav-link]").length);
-console.log("Pages found:", document.querySelectorAll("[data-page]").length);
-
-// Test click handler directly on resume button
+// SIMPLE AND BULLETPROOF PAGE NAVIGATION
 document.addEventListener('DOMContentLoaded', function() {
-  const resumeBtn = document.querySelector('[data-page="resume"]');
-  const resumePage = document.querySelector('article[data-page="resume"]');
+  console.log("DOM loaded, setting up navigation...");
   
-  console.log("Resume button found:", !!resumeBtn);
-  console.log("Resume page found:", !!resumePage);
+  // Get About button and section
+  const aboutBtn = document.querySelector('button[data-nav-link]:not([data-page])');
+  const aboutSection = document.querySelector('article[data-page="about"]');
   
-  if (resumeBtn) {
+  // Get Resume button and section  
+  const resumeBtn = document.querySelector('button[data-page="resume"]');
+  const resumeSection = document.querySelector('article[data-page="resume"]');
+  
+  console.log("About button:", !!aboutBtn);
+  console.log("About section:", !!aboutSection);
+  console.log("Resume button:", !!resumeBtn);
+  console.log("Resume section:", !!resumeSection);
+  
+  // Function to show a specific section
+  function showSection(targetSection, targetButton) {
+    console.log("Showing section:", targetSection.dataset.page);
+    
+    // Hide all sections
+    document.querySelectorAll('article[data-page]').forEach(section => {
+      section.classList.remove('active');
+    });
+    
+    // Remove active from all nav buttons
+    document.querySelectorAll('button[data-nav-link]').forEach(btn => {
+      btn.classList.remove('active');
+    });
+    
+    // Show target section and activate button
+    targetSection.classList.add('active');
+    targetButton.classList.add('active');
+    
+    window.scrollTo(0, 0);
+  }
+  
+  // About button click
+  if (aboutBtn && aboutSection) {
+    aboutBtn.addEventListener('click', function() {
+      console.log("About button clicked!");
+      showSection(aboutSection, aboutBtn);
+    });
+  }
+  
+  // Resume button click
+  if (resumeBtn && resumeSection) {
     resumeBtn.addEventListener('click', function() {
-      console.log("Resume button clicked directly!");
-      if (resumePage) {
-        // Remove active from all
-        document.querySelectorAll('[data-page]').forEach(page => page.classList.remove('active'));
-        document.querySelectorAll('[data-nav-link]').forEach(link => link.classList.remove('active'));
-        
-        // Add active to resume
-        resumePage.classList.add('active');
-        this.classList.add('active');
-        console.log("Resume page activated!");
-      }
+      console.log("Resume button clicked!");
+      showSection(resumeSection, resumeBtn);
     });
   }
 });
