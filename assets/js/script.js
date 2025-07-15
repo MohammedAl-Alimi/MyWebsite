@@ -177,3 +177,33 @@ for (let i = 0; i < navigationLinks.length; i++) {
     }
   });
 }
+
+// Debug: Test if elements are found correctly
+console.log("Script loaded!");
+console.log("Navigation links found:", document.querySelectorAll("[data-nav-link]").length);
+console.log("Pages found:", document.querySelectorAll("[data-page]").length);
+
+// Test click handler directly on resume button
+document.addEventListener('DOMContentLoaded', function() {
+  const resumeBtn = document.querySelector('[data-page="resume"]');
+  const resumePage = document.querySelector('article[data-page="resume"]');
+  
+  console.log("Resume button found:", !!resumeBtn);
+  console.log("Resume page found:", !!resumePage);
+  
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', function() {
+      console.log("Resume button clicked directly!");
+      if (resumePage) {
+        // Remove active from all
+        document.querySelectorAll('[data-page]').forEach(page => page.classList.remove('active'));
+        document.querySelectorAll('[data-nav-link]').forEach(link => link.classList.remove('active'));
+        
+        // Add active to resume
+        resumePage.classList.add('active');
+        this.classList.add('active');
+        console.log("Resume page activated!");
+      }
+    });
+  }
+});
