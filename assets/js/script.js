@@ -148,10 +148,16 @@ for (let i = 0; i < navigationLinks.length; i++) {
       if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
         pages[i].classList.add("active");
         navigationLinks[i].classList.add("active");
+        // Add fade-in animation
+        pages[i].classList.add("fade-in");
+        setTimeout(() => {
+          pages[i].classList.remove("fade-in");
+        }, 500); // match CSS animation duration
         window.scrollTo(0, 0);
       } else {
         pages[i].classList.remove("active");
         navigationLinks[i].classList.remove("active");
+        pages[i].classList.remove("fade-in");
       }
     }
 
