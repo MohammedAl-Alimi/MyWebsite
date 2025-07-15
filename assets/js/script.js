@@ -143,23 +143,37 @@ const pages = document.querySelectorAll("[data-page]");
 // add event to all nav link
 for (let i = 0; i < navigationLinks.length; i++) {
   navigationLinks[i].addEventListener("click", function () {
-
-    for (let i = 0; i < pages.length; i++) {
-      if ((this.dataset.page || this.innerHTML.toLowerCase()) === pages[i].dataset.page) {
-        pages[i].classList.add("active");
-        navigationLinks[i].classList.add("active");
+    console.log("Nav button clicked:", this.innerHTML, "data-page:", this.dataset.page);
+    
+    const targetPage = this.dataset.page || this.innerHTML.toLowerCase();
+    console.log("Looking for page with data-page:", targetPage);
+    
+    for (let j = 0; j < pages.length; j++) {
+      console.log("Checking page:", pages[j].dataset.page);
+      
+      if (targetPage === pages[j].dataset.page) {
+        console.log("Match found! Activating page:", pages[j].dataset.page);
+        
+        // Remove active from all pages and nav links
+        pages.forEach(page => {
+          page.classList.remove("active");
+          page.classList.remove("fade-in");
+        });
+        navigationLinks.forEach(link => link.classList.remove("active"));
+        
+        // Add active to current page and nav link
+        pages[j].classList.add("active");
+        this.classList.add("active");
+        
         // Add fade-in animation
-        pages[i].classList.add("fade-in");
+        pages[j].classList.add("fade-in");
         setTimeout(() => {
-          pages[i].classList.remove("fade-in");
-        }, 500); // match CSS animation duration
+          pages[j].classList.remove("fade-in");
+        }, 500);
+        
         window.scrollTo(0, 0);
-      } else {
-        pages[i].classList.remove("active");
-        navigationLinks[i].classList.remove("active");
-        pages[i].classList.remove("fade-in");
+        break;
       }
     }
-
   });
 }
